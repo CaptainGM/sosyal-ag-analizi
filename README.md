@@ -6,6 +6,10 @@ Akademik makaleler arasındaki atıf (citation) ilişkilerini bir graf olarak mo
 
 *1000 makale, 1590 atıf ilişkisi içeren gerçek veri seti yüklenmiş hâli.*
 
+Bir makale düğümünün üzerine gelindiğinde detay bilgisi (ID, yazar, başlık, yıl, atıf sayısı) gösterilir:
+
+![Tooltip detayı](tooltip-detay.jpeg)
+
 ## Özellikler
 
 - Makale verisini (`Data/data.json`) DOI, yazar, yıl, anahtar kelime ve referans bilgileriyle birlikte yükleme (`DataLoader`, `JsonParser`)
