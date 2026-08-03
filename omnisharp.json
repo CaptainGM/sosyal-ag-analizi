@@ -1,0 +1,12 @@
+{
+    "msbuild": {
+        "enabled": true,
+        "loadProjectsOnDemand": false
+    },
+    "RoslynExtensionsOptions": {
+        "enableAnalyzersSupport": true
+    },
+    "FormattingOptions": {
+        "enableEditorConfigSupport": true
+    }
+}

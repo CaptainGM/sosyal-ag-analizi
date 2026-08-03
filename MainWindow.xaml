@@ -1,0 +1,511 @@
+<Window x:Class="SocialNetworkAnalysis.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Makale Atıf Ağı Analizi - Prolab 3"
+        Height="900"
+        Width="1500"
+        WindowStartupLocation="CenterScreen"
+        Background="#1e1e2e">
+
+        <!-- Stiller - En başta tanımlanmalı -->
+        <Window.Resources>
+                <Style x:Key="ActionButton"
+                       TargetType="Button">
+                        <Setter Property="Background"
+                                Value="#4CAF50"/>
+                        <Setter Property="Foreground"
+                                Value="White"/>
+                        <Setter Property="BorderThickness"
+                                Value="0"/>
+                        <Setter Property="Padding"
+                                Value="15,10"/>
+                        <Setter Property="FontSize"
+                                Value="14"/>
+                        <Setter Property="Cursor"
+                                Value="Hand"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        CornerRadius="5"
+                                                        Padding="{TemplateBinding Padding}">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                          VerticalAlignment="Center"/>
+                                                </Border>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                                <Trigger Property="IsMouseOver"
+                                         Value="True">
+                                        <Setter Property="Background"
+                                                Value="#45a049"/>
+                                </Trigger>
+                        </Style.Triggers>
+                </Style>
+
+                <Style x:Key="SmallButton"
+                       TargetType="Button">
+                        <Setter Property="Background"
+                                Value="#3498db"/>
+                        <Setter Property="Foreground"
+                                Value="White"/>
+                        <Setter Property="BorderThickness"
+                                Value="0"/>
+                        <Setter Property="Padding"
+                                Value="10,6"/>
+                        <Setter Property="FontSize"
+                                Value="12"/>
+                        <Setter Property="Cursor"
+                                Value="Hand"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        CornerRadius="4"
+                                                        Padding="{TemplateBinding Padding}">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                          VerticalAlignment="Center"/>
+                                                </Border>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                                <Trigger Property="IsMouseOver"
+                                         Value="True">
+                                        <Setter Property="Background"
+                                                Value="#2980b9"/>
+                                </Trigger>
+                        </Style.Triggers>
+                </Style>
+        </Window.Resources>
+
+        <Grid>
+                <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="420"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Sol Panel - Makale Listesi ve Kontroller -->
+                <Border Grid.Column="0"
+                        Background="#2d2d3d"
+                        Margin="10"
+                        CornerRadius="10">
+                        <Grid Margin="15">
+                                <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Başlık -->
+                                <TextBlock Grid.Row="0"
+                                           Text="📚 Makaleler"
+                                           Foreground="White"
+                                           FontSize="20"
+                                           FontWeight="Bold"
+                                           Margin="0,0,0,15"/>
+
+                                <!-- Arama -->
+                                <TextBox Grid.Row="1"
+                                         x:Name="txtSearch"
+                                         Background="#3d3d4d"
+                                         Foreground="White"
+                                         BorderThickness="0"
+                                         Padding="10"
+                                         FontSize="14"
+                                         Margin="0,0,0,10"
+                                         TextChanged="TxtSearch_TextChanged"/>
+
+                                <!-- Makale Listesi -->
+                                <ListBox Grid.Row="2"
+                                         x:Name="lstArticles"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         SelectionChanged="LstArticles_SelectionChanged"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                        <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                        <Border Background="#3d3d4d"
+                                                                CornerRadius="8"
+                                                                Padding="10"
+                                                                Margin="0,3">
+                                                                <StackPanel>
+                                                                        <TextBlock Text="{Binding Title}"
+                                                                                   Foreground="White"
+                                                                                   FontWeight="SemiBold"
+                                                                                   FontSize="12"
+                                                                                   TextWrapping="Wrap"
+                                                                                   MaxHeight="40"/>
+                                                                        <StackPanel Orientation="Horizontal"
+                                                                                    Margin="0,5,0,0">
+                                                                                <TextBlock Text="Yıl: "
+                                                                                           Foreground="Gray"
+                                                                                           FontSize="11"/>
+                                                                                <TextBlock Text="{Binding Year}"
+                                                                                           Foreground="#aaa"
+                                                                                           FontSize="11"/>
+                                                                                <TextBlock Text="  Atıf: "
+                                                                                           Foreground="Gray"
+                                                                                           FontSize="11"
+                                                                                           Margin="10,0,0,0"/>
+                                                                                <TextBlock Text="{Binding CitationCount}"
+                                                                                           Foreground="#4CAF50"
+                                                                                           FontSize="11"
+                                                                                           FontWeight="Bold"/>
+                                                                        </StackPanel>
+                                                                </StackPanel>
+                                                        </Border>
+                                                </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                </ListBox>
+
+                                <!-- İstatistikler -->
+                                <Border Grid.Row="3"
+                                        Background="#3d3d4d"
+                                        CornerRadius="8"
+                                        Padding="10"
+                                        Margin="0,10,0,10">
+                                        <StackPanel>
+                                                <TextBlock Text="İstatistikler"
+                                                           Foreground="White"
+                                                           FontWeight="Bold"
+                                                           Margin="0,0,0,5"/>
+                                                <TextBlock x:Name="txtStats"
+                                                           Foreground="#aaa"
+                                                           FontSize="11"
+                                                           TextWrapping="Wrap"/>
+                                        </StackPanel>
+                                </Border>
+
+                                <!-- Algoritma Butonları -->
+                                <StackPanel Grid.Row="4">
+                                        <Button x:Name="btnLoadData"
+                                                Content="Veri Yükle"
+                                                Click="BtnLoadData_Click"
+                                                Style="{StaticResource ActionButton}"
+                                                Margin="0,0,0,5"/>
+                                </StackPanel>
+                        </Grid>
+                </Border>
+
+                <!-- Orta Panel - Graf Görselleştirme -->
+                <Border Grid.Column="1"
+                        Background="#252535"
+                        Margin="5,10"
+                        CornerRadius="10">
+                        <Grid>
+                                <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Görselleştirme Başlığı -->
+                                <StackPanel Grid.Row="0"
+                                            Orientation="Horizontal"
+                                            Margin="15,10">
+                                        <TextBlock Text="Atıf Ağı Görselleştirme"
+                                                   Foreground="White"
+                                                   FontSize="18"
+                                                   FontWeight="Bold"/>
+                                        <CheckBox x:Name="chkShowIdEdges"
+                                                  Content="ID Sıralı Kenarlar"
+                                                  Foreground="White"
+                                                  IsChecked="True"
+                                                  Margin="30,0,0,0"
+                                                  VerticalAlignment="Center"
+                                                  Checked="ChkShowIdEdges_Changed"
+                                                  Unchecked="ChkShowIdEdges_Changed"/>
+                                </StackPanel>
+
+                                <!-- Canvas -->
+                                <Canvas Grid.Row="1"
+                                        x:Name="graphCanvas"
+                                        Background="#1a1a2a"
+                                        Margin="10"
+                                        ClipToBounds="True"/>
+                        </Grid>
+                </Border>
+
+                <!-- Sağ Panel - Analiz ve Sonuçlar -->
+                <Border Grid.Column="2"
+                        Background="#2d2d3d"
+                        Margin="10"
+                        CornerRadius="10">
+                        <ScrollViewer VerticalScrollBarVisibility="Visible"
+                                      HorizontalScrollBarVisibility="Disabled">
+                                <StackPanel Margin="15">
+
+                                        <!-- h-core Analizi -->
+                                        <Border Background="#3d3d4d"
+                                                CornerRadius="8"
+                                                Padding="15"
+                                                Margin="0,0,0,10">
+                                                <StackPanel>
+                                                        <TextBlock Text="Makale h-index Analizi"
+                                                                   Foreground="White"
+                                                                   FontWeight="Bold"
+                                                                   FontSize="14"
+                                                                   Margin="0,0,0,8"/>
+                                                        <TextBlock Text="Makale Ara:"
+                                                                   Foreground="White"
+                                                                   FontSize="11"
+                                                                   Margin="0,0,0,3"/>
+                                                        <TextBox x:Name="txtArticleSearch"
+                                                                 Background="#2d2d3d"
+                                                                 Foreground="White"
+                                                                 BorderThickness="1"
+                                                                 BorderBrush="#555"
+                                                                 Padding="5"
+                                                                 FontSize="11"
+                                                                 TextChanged="TxtArticleSearch_TextChanged"/>
+                                                        <ListBox x:Name="lstArticleSearchResults"
+                                                                 MaxHeight="100"
+                                                                 Background="#2d2d3d"
+                                                                 Foreground="White"
+                                                                 BorderThickness="1"
+                                                                 BorderBrush="#555"
+                                                                 Margin="0,3,0,3"
+                                                                 Visibility="Collapsed"
+                                                                 SelectionChanged="LstArticleSearchResults_SelectionChanged">
+                                                                <ListBox.ItemTemplate>
+                                                                        <DataTemplate>
+                                                                                <TextBlock Text="{Binding DisplayText}"
+                                                                                           TextWrapping="NoWrap"
+                                                                                           FontSize="10"/>
+                                                                        </DataTemplate>
+                                                                </ListBox.ItemTemplate>
+                                                        </ListBox>
+                                                        <StackPanel Orientation="Horizontal"
+                                                                    Margin="0,5,0,0">
+                                                                <TextBlock Text="Seçili ID: "
+                                                                           Foreground="White"
+                                                                           VerticalAlignment="Center"
+                                                                           FontSize="11"/>
+                                                                <TextBox x:Name="txtSelectedArticleId"
+                                                                         Width="90"
+                                                                         Background="#2d2d3d"
+                                                                         Foreground="#4CAF50"
+                                                                         FontWeight="Bold"
+                                                                         BorderThickness="1"
+                                                                         BorderBrush="#555"
+                                                                         VerticalAlignment="Center"
+                                                                         Padding="3"
+                                                                         FontSize="11"
+                                                                         Margin="3,0"/>
+                                                                <Button Content="Hesapla"
+                                                                        Click="BtnCalculateHIndex_Click"
+                                                                        Style="{StaticResource SmallButton}"
+                                                                        Width="60"
+                                                                        FontSize="11"/>
+                                                        </StackPanel>
+                                                        <TextBlock x:Name="txtHCoreInfo"
+                                                                   Foreground="#aaa"
+                                                                   FontSize="10"
+                                                                   Margin="0,5,0,0"
+                                                                   TextWrapping="Wrap"/>
+                                                </StackPanel>
+                                        </Border>
+
+                                        <!-- h-core Analizi (Tüm Graf) -->
+                                        <Border Background="#3d3d4d"
+                                                CornerRadius="8"
+                                                Padding="12"
+                                                Margin="0,0,0,10">
+                                                <StackPanel>
+                                                        <TextBlock Text="h-core Analizi"
+                                                                   Foreground="White"
+                                                                   FontWeight="Bold"
+                                                                   FontSize="14"
+                                                                   Margin="0,0,0,3"/>
+                                                        <TextBlock Text="(En az h atıf alan makalalar)"
+                                                                   Foreground="#888"
+                                                                   FontSize="9"
+                                                                   Margin="0,0,0,8"/>
+                                                        <StackPanel Orientation="Horizontal">
+                                                                <TextBlock Text="h değeri: "
+                                                                           Foreground="White"
+                                                                           VerticalAlignment="Center"
+                                                                           FontSize="11"/>
+                                                                <TextBox x:Name="txtHValue"
+                                                                         Width="50"
+                                                                         Text="5"
+                                                                         Background="#2d2d3d"
+                                                                         Foreground="White"
+                                                                         BorderThickness="1"
+                                                                         BorderBrush="#555"
+                                                                         Padding="3"
+                                                                         FontSize="11"
+                                                                         Margin="3,0"/>
+                                                                <Button Content="Bul"
+                                                                        Click="BtnFindHCore_Click"
+                                                                        Style="{StaticResource SmallButton}"
+                                                                        Width="50"
+                                                                        FontSize="11"/>
+                                                        </StackPanel>
+                                                        <TextBlock x:Name="txtGlobalHCoreInfo"
+                                                                   Foreground="#aaa"
+                                                                   FontSize="10"
+                                                                   Margin="0,5,0,0"
+                                                                   TextWrapping="Wrap"/>
+                                                </StackPanel>
+                                        </Border>
+
+                                        <!-- k-core Analizi -->
+                                        <Border Background="#3d3d4d"
+                                                CornerRadius="8"
+                                                Padding="12"
+                                                Margin="0,0,0,10">
+                                                <StackPanel>
+                                                        <TextBlock Text="k-core Decomposition"
+                                                                   Foreground="White"
+                                                                   FontWeight="Bold"
+                                                                   FontSize="14"
+                                                                   Margin="0,0,0,3"/>
+                                                        <TextBlock Text="(En az k derece ile bağlı makalalar)"
+                                                                   Foreground="#888"
+                                                                   FontSize="9"
+                                                                   Margin="0,0,0,8"/>
+                                                        <StackPanel Orientation="Horizontal">
+                                                                <TextBlock Text="k değeri: "
+                                                                           Foreground="White"
+                                                                           VerticalAlignment="Center"
+                                                                           FontSize="11"/>
+                                                                <TextBox x:Name="txtKValue"
+                                                                         Width="50"
+                                                                         Text="2"
+                                                                         Background="#2d2d3d"
+                                                                         Foreground="White"
+                                                                         BorderThickness="1"
+                                                                         BorderBrush="#555"
+                                                                         Padding="3"
+                                                                         FontSize="11"
+                                                                         Margin="3,0"/>
+                                                                <Button Content="Bul"
+                                                                        Click="BtnFindKCore_Click"
+                                                                        Style="{StaticResource SmallButton}"
+                                                                        Width="50"
+                                                                        FontSize="11"/>
+                                                        </StackPanel>
+                                                        <TextBlock x:Name="txtKCoreInfo"
+                                                                   Foreground="#aaa"
+                                                                   FontSize="10"
+                                                                   Margin="0,5,0,0"
+                                                                   TextWrapping="Wrap"/>
+                                                </StackPanel>
+                                        </Border>
+
+                                        <!-- Yol Bulma -->
+                                        <Border Background="#3d3d4d"
+                                                CornerRadius="8"
+                                                Padding="12"
+                                                Margin="0,0,0,10">
+                                                <StackPanel>
+                                                        <TextBlock Text="En Kısa Yol (BFS)"
+                                                                   Foreground="White"
+                                                                   FontWeight="Bold"
+                                                                   FontSize="14"
+                                                                   Margin="0,0,0,8"/>
+                                                        <TextBlock Text="Başlangıç Ara:"
+                                                                   Foreground="White"
+                                                                   FontSize="10"/>
+                                                        <TextBox x:Name="txtStartSearch"
+                                                                 Background="#2d2d3d"
+                                                                 Foreground="White"
+                                                                 BorderThickness="1"
+                                                                 BorderBrush="#555"
+                                                                 Padding="3"
+                                                                 FontSize="10"
+                                                                 TextChanged="TxtStartSearch_TextChanged"/>
+                                                        <ComboBox x:Name="cmbStartArticle"
+                                                                  Background="#2d2d3d"
+                                                                  FontSize="10"
+                                                                  Margin="0,2,0,5"/>
+                                                        <TextBlock Text="Hedef Ara:"
+                                                                   Foreground="White"
+                                                                   FontSize="10"/>
+                                                        <TextBox x:Name="txtEndSearch"
+                                                                 Background="#2d2d3d"
+                                                                 Foreground="White"
+                                                                 BorderThickness="1"
+                                                                 BorderBrush="#555"
+                                                                 Padding="3"
+                                                                 FontSize="10"
+                                                                 TextChanged="TxtEndSearch_TextChanged"/>
+                                                        <ComboBox x:Name="cmbEndArticle"
+                                                                  Background="#2d2d3d"
+                                                                  FontSize="10"
+                                                                  Margin="0,2,0,5"/>
+                                                        <Button Content="Yol Bul"
+                                                                Click="BtnFindPath_Click"
+                                                                Style="{StaticResource SmallButton}"
+                                                                FontSize="11"/>
+                                                        <TextBlock x:Name="txtPathInfo"
+                                                                   Foreground="#aaa"
+                                                                   FontSize="10"
+                                                                   Margin="0,5,0,0"
+                                                                   TextWrapping="Wrap"/>
+                                                </StackPanel>
+                                        </Border>
+
+                                        <!-- DFS Analizi -->
+                                        <Border Background="#3d3d4d"
+                                                CornerRadius="8"
+                                                Padding="12"
+                                                Margin="0,0,0,10">
+                                                <StackPanel>
+                                                        <TextBlock Text="Betweenness Centrality"
+                                                                   Foreground="White"
+                                                                   FontWeight="Bold"
+                                                                   FontSize="14"
+                                                                   Margin="0,0,0,8"/>
+                                                        <Button Content="Hesapla"
+                                                                Click="BtnCalculateBetweenness_Click"
+                                                                Style="{StaticResource SmallButton}"
+                                                                FontSize="11"
+                                                                Margin="0,0,0,3"/>
+                                                        <Button Content="Bağlı Bileşenler (DFS)"
+                                                                Click="BtnFindComponents_Click"
+                                                                Style="{StaticResource SmallButton}"
+                                                                FontSize="11"
+                                                                Margin="0,0,0,3"/>
+                                                        <Button Content="Döngü Tespiti"
+                                                                Click="BtnDetectCycle_Click"
+                                                                Style="{StaticResource SmallButton}"
+                                                                FontSize="11"/>
+                                                </StackPanel>
+                                        </Border>
+
+                                        <!-- Sonuçlar -->
+                                        <Border Background="#3d3d4d"
+                                                CornerRadius="8"
+                                                Padding="12"
+                                                MinHeight="150">
+                                                <StackPanel>
+                                                        <TextBlock Text="Sonuçlar"
+                                                                   Foreground="White"
+                                                                   FontWeight="Bold"
+                                                                   FontSize="14"
+                                                                   Margin="0,0,0,8"/>
+                                                        <TextBlock x:Name="txtResults"
+                                                                   Foreground="#ddd"
+                                                                   FontSize="11"
+                                                                   TextWrapping="Wrap"/>
+                                                        <TextBlock x:Name="txtShowMore"
+                                                                   Text="▼ Devamını Gör"
+                                                                   Foreground="#4FC3F7"
+                                                                   FontSize="11"
+                                                                   Cursor="Hand"
+                                                                   Margin="0,8,0,0"
+                                                                   Visibility="Collapsed"
+                                                                   MouseLeftButtonUp="TxtShowMore_Click"/>
+                                                </StackPanel>
+                                        </Border>
+                                </StackPanel>
+                        </ScrollViewer>
+                </Border>
+        </Grid>
+</Window>
