@@ -2,6 +2,10 @@
 
 Akademik makaleler arasındaki atıf (citation) ilişkilerini bir graf olarak modelleyip; gezinme, merkezilik ve topluluk (core) analizleri yapan C# / WPF masaüstü uygulaması.
 
+![Uygulama ekran görüntüsü](screenshot.png)
+
+*1000 makale, 1590 atıf ilişkisi içeren gerçek veri seti yüklenmiş hâli.*
+
 ## Özellikler
 
 - Makale verisini (`Data/data.json`) DOI, yazar, yıl, anahtar kelime ve referans bilgileriyle birlikte yükleme (`DataLoader`, `JsonParser`)
