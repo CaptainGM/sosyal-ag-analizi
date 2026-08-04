@@ -10,6 +10,17 @@ Bir makale düğümünün üzerine gelindiğinde detay bilgisi (ID, yazar, başl
 
 ![Tooltip detayı](tooltip-detay.jpeg)
 
+## Mimari
+
+```mermaid
+flowchart LR
+    J[data.json] --> DL[DataLoader / JsonParser]
+    DL --> G[ArticleGraph]
+    G --> A["BFS / DFS / K-Core / H-Core / Betweenness"]
+    A --> V[GraphVisualizer]
+    V --> UI[WPF Arayüzü]
+```
+
 ## Özellikler
 
 - Makale verisini (`Data/data.json`) DOI, yazar, yıl, anahtar kelime ve referans bilgileriyle birlikte yükleme (`DataLoader`, `JsonParser`)
